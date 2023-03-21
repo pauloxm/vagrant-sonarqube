@@ -27,3 +27,17 @@ EOT
 systemctl daemon-reload
 systemctl start sonar.service
 systemctl enable sonar.service
+
+## Instalar Sonar Scanner
+
+wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.8.0.2856-linux.zip
+unzip sonar-scanner-cli-4.8.0.2856-linux.zip -d /opt
+mv /opt/sonar-scanner-4.8.0.2856-linux /opt/sonar-scanner
+chown -R sonar:sonar /opt/sonar-scanner
+echo 'export PATH=$PATH:/opt/sonar-scanner/bin' | sudo tee -a /etc/profile
+
+## Instalar Golang
+
+wget https://go.dev/dl/go1.20.2.linux-amd64.tar.gz
+rm -rf /usr/local/go && tar -C /usr/local -xzf go1.20.2.linux-amd64.tar.gz
+echo 'export PATH=$PATH:/usr/local/go/bin' | sudo tee -a /etc/profile
