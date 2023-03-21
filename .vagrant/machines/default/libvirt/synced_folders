@@ -1,1 +1,0 @@
-{"rsync":{"/vagrant":{"type":"rsync","guestpath":"/vagrant","hostpath":"/home/05651609407@detran.govrn/Git/Vagrant/sonarqube","disabled":false,"__vagrantfile":true,"owner":"vagrant","group":"vagrant"}}}
