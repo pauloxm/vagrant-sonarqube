@@ -37,12 +37,21 @@ systemctl enable sonar.service
 
 wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-linux.zip
 unzip sonar-scanner-cli-5.0.1.3006-linux.zip -d /opt
-mv /opt/sonar-scanner-cli-5.0.1.3006-linux /opt/sonar-scanner
+mv /opt/sonar-scanner-5.0.1.3006-linux /opt/sonar-scanner
 chown -R sonar:sonar /opt/sonar-scanner
 echo 'export PATH=$PATH:/opt/sonar-scanner/bin' | sudo tee -a /etc/profile
+
+
+## Instalar Node.js
+dnf module enable nodejs:20 -y
+dnf install -y nodejs
 
 ## Instalar Golang
 
 wget https://go.dev/dl/go1.20.2.linux-amd64.tar.gz
 rm -rf /usr/local/go && tar -C /usr/local -xzf go1.20.2.linux-amd64.tar.gz
 echo 'export PATH=$PATH:/usr/local/go/bin' | sudo tee -a /etc/profile
+
+## Fazendo limpeza
+
+rm -rf go1.20.2.linux-amd64.tar.gz  sonar-scanner-cli-5.0.1.3006-linux.zip
