@@ -1,14 +1,20 @@
-Vagrant.configure("2") do |config|
-  config.vm.define :sonarqube do |sonarqube|
-    sonarqube.vm.box = "centos/7"
-    sonarqube.vm.hostname = "sonarqube"
-    sonarqube.vm.network "forwarded_port", guest: 9000, host: 9000, host_ip: "127.0.0.1"
-    sonarqube.vm.network "private_network", ip: "192.168.1.6"
-    sonarqube.vm.provision 'shell', path: 'provision.sh'
-    sonarqube.vm.provider "libvirt" do |libvirt|
-      libvirt.cpus = "2"
-      libvirt.memory = "1024"
-      libvirt.default_prefix = ""
+## 1. Definindo as características das máquinas virtuais 
+sonarqube = {
+  'sonarqube' => {'memory' => '1024', 'cpus' => 2, 'ip' => '60', 'box' => 'centos/8'},
+}
+## 1. Aplicando as configurações no virtualizador
+Vagrant.configure('2') do |config|
+  config.vm.box_check_update = false                                    ## opcional: adiar a checagem de updates
+  sonarqube.each do |name, conf|
+    config.vm.define "#{name}" do |my|
+      my.vm.provision 'shell', path: 'provision.sh'
+      my.vm.box = conf['box']                                           ## seleciona a box com a distribuição linux a ser utilizada
+      my.vm.hostname = "#{name}.example.com"                            ## define o hostname da máquina
+      my.vm.network 'private_network', ip: "192.168.56.#{conf['ip']}"   ## define o ip de cada máquina de acordo com o range do Virtualbox
+      my.vm.provider 'libvirt' do |vb|
+        vb.memory = conf['memory']                                      ## define quantidade de recurso de memória
+        vb.cpus = conf['cpus']                                          ## define quantidade de vCPUs
+      end
     end
   end
 end

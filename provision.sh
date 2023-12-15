@@ -1,13 +1,18 @@
 #!/bin/bash
 useradd sonar
-yum install -y epel-release wget unzip java-11-openjdk java-11-openjdk-devel
+sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-Linux-*; \
+sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-Linux-*; \
+dnf update -y; \
+dnf --disablerepo '*' --enablerepo extras swap centos-linux-repos centos-stream-repos -y; \
+dnf distro-sync -y;
+yum install -y epel-release wget unzip java-17-openjdk java-17-openjdk-devel
 export JAVA_HOME=$(dirname $(dirname $(readlink $(readlink $(which javac)))))
 source /etc/bashrc
-wget https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-8.0.zip
-unzip sonarqube-8.0.zip -d /opt
-mv /opt/sonarqube-8.0 /opt/sonarqube
+wget https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-10.3.0.82913.zip
+unzip sonarqube-10.3.0.82913.zip -d /opt
+mv /opt/sonarqube-10.3.0.82913 /opt/sonarqube
 chown -R sonar:sonar /opt/sonarqube
-rm -rf sonarqube-8.0.zip
+rm -rf sonarqube-10.3.0.82913.zip
 touch /etc/systemd/system/sonar.service
 echo "" > /etc/systemd/system/sonar.service
 cat <<EOT >> /etc/systemd/system/sonar.service
@@ -30,9 +35,9 @@ systemctl enable sonar.service
 
 ## Instalar Sonar Scanner
 
-wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.8.0.2856-linux.zip
-unzip sonar-scanner-cli-4.8.0.2856-linux.zip -d /opt
-mv /opt/sonar-scanner-4.8.0.2856-linux /opt/sonar-scanner
+wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-linux.zip
+unzip sonar-scanner-cli-5.0.1.3006-linux.zip -d /opt
+mv /opt/sonar-scanner-cli-5.0.1.3006-linux /opt/sonar-scanner
 chown -R sonar:sonar /opt/sonar-scanner
 echo 'export PATH=$PATH:/opt/sonar-scanner/bin' | sudo tee -a /etc/profile
 
