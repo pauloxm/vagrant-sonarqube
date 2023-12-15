@@ -1,6 +1,6 @@
 Projeto IaC Laboratório usando:
 
-- Ubuntu Desktop
+- CentOS 8
 - Vagrant
 - Virt-Manager
 - SonarQube
